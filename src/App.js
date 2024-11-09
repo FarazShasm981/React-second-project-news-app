@@ -27,7 +27,7 @@ const App = ()=> {
             <Routes>
               <Route
                 exact
-                path="/React-second-project-news-app"
+                path="/"
                 element={
                   <News
                     setProgress={setProgress}
