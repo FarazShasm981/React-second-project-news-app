@@ -13,7 +13,7 @@ const App = ()=> {
   
   
     return (
-      <Router>
+      <Router basename="/React-second-project-news-app">
         <>
           <nav>
             <NavBar />
@@ -27,7 +27,7 @@ const App = ()=> {
             <Routes>
               <Route
                 exact
-                path="/"
+                path="/React-second-project-news-app"
                 element={
                   <News
                     setProgress={setProgress}
