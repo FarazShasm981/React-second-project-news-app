@@ -3,17 +3,22 @@ import "./App.css";
 import React, {useState} from "react";
 import NavBar from "./components/NavBar";
 import News from "./components/News";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 
 const App = ()=> {
   const pageSize = 6;
+
+  const apiKey = process.env.REACT_APP_NEWS_API_KEY
+  // console.log("API Key:", process.env.REACT_APP_NEWS_API_KEY);
+  console.log("API Key:", apiKey);
+
   const [progress,setProgress] = useState(0);
 
   
   
     return (
-      <Router basename="/React-second-project-news-app">
+      <Router>
         <>
           <nav>
             <NavBar />
@@ -31,6 +36,7 @@ const App = ()=> {
                 element={
                   <News
                     setProgress={setProgress}
+                    apiKey={apiKey}
                     key="general"
                     pageSize={pageSize}
                     country="us"
@@ -44,6 +50,7 @@ const App = ()=> {
                 element={
                   <News
                     setProgress={setProgress}
+                    apiKey={apiKey}
                     key="business"
                     pageSize={pageSize}
                     country="us"
@@ -57,6 +64,7 @@ const App = ()=> {
                 element={
                   <News
                     setProgress={setProgress}
+                    apiKey={apiKey}
                     key="entertainment"
                     pageSize={pageSize}
                     country="us"
@@ -70,6 +78,7 @@ const App = ()=> {
                 element={
                   <News
                     setProgress={setProgress}
+                    apiKey={apiKey}
                     key="general"
                     pageSize={pageSize}
                     country="us"
@@ -83,6 +92,7 @@ const App = ()=> {
                 element={
                   <News
                     setProgress={setProgress}
+                    apiKey={apiKey}
                     key="health"
                     pageSize={pageSize}
                     country="us"
@@ -96,6 +106,7 @@ const App = ()=> {
                 element={
                   <News
                     setProgress={setProgress}
+                    apiKey={apiKey}
                     key="science"
                     pageSize={pageSize}
                     country="us"
@@ -109,6 +120,7 @@ const App = ()=> {
                 element={
                   <News
                     setProgress={setProgress}
+                    apiKey={apiKey}
                     key="sports"
                     pageSize={pageSize}
                     country="us"
@@ -122,6 +134,7 @@ const App = ()=> {
                 element={
                   <News
                     setProgress={setProgress}
+                    apiKey={apiKey}
                     key="technology"
                     pageSize={pageSize}
                     country="us"
