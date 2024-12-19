@@ -11,7 +11,6 @@ const App = ()=> {
 
   const apiKey = process.env.REACT_APP_NEWS_API_KEY
   // console.log("API Key:", process.env.REACT_APP_NEWS_API_KEY);
-  console.log("API Key:", apiKey);
 
   const [progress,setProgress] = useState(0);
 
