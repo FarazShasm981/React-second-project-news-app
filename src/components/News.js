@@ -19,14 +19,25 @@ const News = (props) => {
   };
   
   const fetchMoreData = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page+1}&pageSize=${props.pageSize}`;
-    setPage(page + 1);
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    console.log(parsedData);
-    setArticles(articles.concat(parsedData.articles));
-    setTotalResults(parsedData.totalResults);
+    try {
+      const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${
+        page + 1
+      }&pageSize=${props.pageSize}`;
+      setPage(page + 1);
+      const data = await fetch(url);
+      const parsedData = await data.json();
+      
+      if (parsedData.articles) {
+        setArticles(articles.concat(parsedData.articles));
+        setTotalResults(parsedData.totalResults);
+      } else {
+        console.error("Error fetching more articles:", parsedData);
+      }
+    } catch (error) {
+      console.error("Error in fetchMoreData:", error);
+    }
   };
+  
   
   const updateNews = async () => {
     props.setProgress(10);
@@ -68,7 +79,7 @@ const News = (props) => {
       >
         <div className="container">
           <div className="row">
-            {articles.map((element) => {
+            {articles && articles.map((element) => {
               return (
                 <div className="col-md-4">
                   <NewsItem
