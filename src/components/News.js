@@ -13,48 +13,48 @@ const News = (props) => {
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
 
-  
   const capitalizeFirstLetter = (val) => {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1);
   };
-  
+
   const fetchMoreData = async () => {
     try {
-      const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${
+      let url = `https://newsapi.org/v2/top-headlines?country=${
+        props.country
+      }&category=${props.category}&apiKey=${props.apiKey}&page=${
         page + 1
       }&pageSize=${props.pageSize}`;
       setPage(page + 1);
-      const data = await fetch(url);
-      const parsedData = await data.json();
-      
-      if (parsedData.articles) {
-        setArticles(articles.concat(parsedData.articles));
-        setTotalResults(parsedData.totalResults);
-      } else {
-        console.error("Error fetching more articles:", parsedData);
-      }
+      let data = await fetch(url);
+      if (!data.ok) throw new Error(`Error: ${data.status}`); // Check HTTP response
+      let parsedData = await data.json();
+      if (!parsedData.articles) throw new Error("No articles found");
+      setArticles(articles.concat(parsedData.articles));
+      setTotalResults(parsedData.totalResults);
     } catch (error) {
-      console.error("Error in fetchMoreData:", error);
+      console.error("Failed to fetch data:", error.message);
     }
   };
-  
-  
   const updateNews = async () => {
-    props.setProgress(10);
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
-    setLoading(true);
-    let data = await fetch(url);
-    props.setProgress(30);
-    let parsedData = await data.json();
-    props.setProgress(70);
-    // console.log(parsedData);
-    setArticles(parsedData.articles);
-    setTotalResults(parsedData.totalResults);
-    setLoading(false);
-    
-    props.setProgress(100);
+    try {
+      props.setProgress(10);
+      const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
+      setLoading(true);
+      let data = await fetch(url);
+      props.setProgress(30);
+      if (!data.ok) throw new Error(`Error: ${data.status}`);
+      let parsedData = await data.json();
+      props.setProgress(70);
+      if (!parsedData.articles) throw new Error("No articles found");
+      setArticles(parsedData.articles);
+      setTotalResults(parsedData.totalResults);
+      setLoading(false);
+      props.setProgress(100);
+    } catch (error) {
+      console.error("Failed to update news:", error.message);
+    }
   };
-  
+
   useEffect(() => {
     updateNews();
     document.title = `${capitalizeFirstLetter(props.category)} - InsightNews`;
@@ -67,7 +67,7 @@ const News = (props) => {
         style={{ margin: "30px 0", marginTop: "90px" }}
       >
         Insight News - Top {capitalizeFirstLetter(props.category)}
-       {''} Headlines
+        {""} Headlines
       </h1>
       {loading && <Spinner />}
 
@@ -79,26 +79,27 @@ const News = (props) => {
       >
         <div className="container">
           <div className="row">
-            {articles && articles.map((element) => {
-              return (
-                <div className="col-md-4">
-                  <NewsItem
-                    key={element.urlToImage}
-                    title={element.title ? element.title.slice(0, 30) : ""}
-                    description={
-                      element.description
-                        ? element.description.slice(0, 70)
-                        : ""
-                    }
-                    imageUrl={element.urlToImage}
-                    newsUrl={element.url}
-                    author={element.author}
-                    date={element.publishedAt}
-                    source={element.source.name}
-                  />
-                </div>
-              );
-            })}
+            {articles &&
+              articles.map((element) => {
+                return (
+                  <div className="col-md-4">
+                    <NewsItem
+                      key={element.urlToImage}
+                      title={element.title ? element.title.slice(0, 30) : ""}
+                      description={
+                        element.description
+                          ? element.description.slice(0, 70)
+                          : ""
+                      }
+                      imageUrl={element.urlToImage}
+                      newsUrl={element.url}
+                      author={element.author}
+                      date={element.publishedAt}
+                      source={element.source.name}
+                    />
+                  </div>
+                );
+              })}
             ;
           </div>
         </div>
