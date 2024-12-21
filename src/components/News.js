@@ -28,6 +28,9 @@ const News = (props) => {
       let data = await fetch(url);
       if (!data.ok) throw new Error(`Error: ${data.status}`); // Check HTTP response
       let parsedData = await data.json();
+      if (parsedData.status === "error") {
+        alert("API error: " + parsedData.message);
+      }
       if (!parsedData.articles) throw new Error("No articles found");
       setArticles(articles.concat(parsedData.articles));
       setTotalResults(parsedData.totalResults);
@@ -44,6 +47,9 @@ const News = (props) => {
       props.setProgress(30);
       if (!data.ok) throw new Error(`Error: ${data.status}`);
       let parsedData = await data.json();
+      if (parsedData.status === "error") {
+        alert("API error: " + parsedData.message);
+      }
       props.setProgress(70);
       if (!parsedData.articles) throw new Error("No articles found");
       setArticles(parsedData.articles);
